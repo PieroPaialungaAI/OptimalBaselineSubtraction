@@ -32,9 +32,9 @@ You can find all the code and data you need in this [public github folder](https
 git clone https://github.com/PieroPaialungaAI/OptimalBaselineSubtraction.git
 ```
 
-### Data Source
+### Data Source
 
-The data used for this article originally come from an Open Database on Kaggle. You don't need to download it again, as everything you need is in the ```OBS_Data``` folder. You can find the original source of the dataset [here] (https://www.kaggle.com/datasets/selfishgene/historical-hourly-weather-data). 
+The data used for this article originally come from an Open Database on Kaggle. You can find the original source of the dataset [here](https://www.kaggle.com/datasets/selfishgene/historical-hourly-weather-data). Nonetheless, note that **you don't need to download it again, as everything you need is in the ```OBS_Data``` folder.**
 
 ### Data Visualization
 
