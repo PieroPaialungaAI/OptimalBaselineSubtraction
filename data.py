@@ -1,6 +1,7 @@
 import numpy as np 
 import pandas as pd 
 from constants import * 
+from utils import * 
 
 class TimeSeriesData():
     def __init__(self, data_folder = DEFAULT_DATA_PATH):
@@ -13,9 +14,13 @@ class TimeSeriesData():
         self.selected_city_data = self.temperature_data[[city,'datetime']]
         self.selected_city_data = self.selected_city_data.reset_index().drop('index',axis=1)
         self.selected_city_data['datetime'] = pd.to_datetime(self.selected_city_data['datetime'])
+        self.selected_city_data  = standardize_data(self.selected_city_data)
         return self.selected_city_data
 
     
     def preprocess_temperature_data(self):
         self.temperature_data = self.temperature_data.dropna().reset_index().drop('index',axis=1)
+
+
+
 
