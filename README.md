@@ -11,9 +11,10 @@ The OBS algorithm is the following:
 
 - **Split the time series into individual segments**, where each segment represents a unit of repeated behavior (e.g., a day, a cycle, or a process run).
 - **Build a library of historical segments** by collecting all previous segments in the time series bank.
-- **For each target segment**, compare it to all others in the library using a similarity metric, such as Mean Absolute Error (MAE).
+- **For compare it to all others in the library using a similarity metric, such as Mean Absolute Error (MAE).
 - **Select the most similar segment** from the library as the optimal baseline.
 - **Subtract the baseline from the target segment** to isolate the residual (i.e., the difference).
 - **Analyze the residual** to identify large deviations, which are flagged as potential anomalies.
 
+![Alt text](images/Workflow.png)
 
