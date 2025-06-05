@@ -23,3 +23,8 @@ def enhance_data(df):
                 df['datetime'].dt.month.min()) + 1
     df['year'] = df['datetime'].dt.year - df['datetime'].dt.year.min() + 1
     return df
+
+
+def split_segments(bank_of_data, city, segment_class = 'day'):
+    list_of_segments = np.array([np.array(group[city]).reshape(-1,1)[:,0] for _, group in bank_of_data.groupby(segment_class)])
+    return list_of_segments

@@ -41,15 +41,19 @@ class TimeSeriesData():
         city_data = self.temperature_dict_data[city]
         self.target_data = city_data[city_data[segment_class] == segment_idx]
         self.bank_of_data = city_data[city_data[segment_class] != segment_idx]
+        self.list_of_candidates = split_segments(self.bank_of_data, city = city, segment_class = segment_class)
         self.city = city
         self.segment_class = segment_class
         self.segment_idx = segment_idx
-
+        
 
     def plot_target_and_baseline(self):
         target_and_baseline_plotter(target_data = self.target_data, bank_of_data = self.bank_of_data, city = self.city,
                                     segment_class = self.segment_class, segment_idx = self.segment_idx)
         
+    def plot_target_and_candidates(self):
+        baseline_vs_candidates_plotter(list_of_candidates = self.list_of_candidates, target_data = self.target_data, 
+                                       city = self.city, segment_class = self.segment_class, segment_idx = self.segment_idx)
 
 
 
