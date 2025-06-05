@@ -15,10 +15,10 @@ class TimeSeriesData():
 
 
     def select_city(self, city):
-
         self.selected_city_data = self.temperature_data[['datetime',city]].copy()
         self.selected_city_data = self.selected_city_data.reset_index().drop('index',axis=1)
         self.selected_city_data  = standardize_data(self.selected_city_data,city)
+        self.selected_city_data = enhance_data(self.selected_city_data)
         return self.selected_city_data
 
     
@@ -34,6 +34,14 @@ class TimeSeriesData():
         for city in city_list:
             self.select_city(city)
             self.temperature_dict_data[city] = self.selected_city_data
+
+    
+    def isolate_city_and_time(self, city, segment_length = 'day', segment_idx = 1):
+        city_data = self.temperature_dict_data[city]
+        self.target_data = city_data[city_data[segment_length] == segment_idx]
+        self.bank_of_data = city_data[city_data[segment_length] != segment_idx]
+        
+
 
 
 
