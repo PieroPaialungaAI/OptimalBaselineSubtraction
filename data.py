@@ -45,17 +45,8 @@ class TimeSeriesData():
         self.city = city
         self.segment_class = segment_class
         self.segment_idx = segment_idx
-        
 
-    def plot_target_and_baseline(self):
-        target_and_baseline_plotter(target_data = self.target_data, bank_of_data = self.bank_of_data, city = self.city,
-                                    segment_class = self.segment_class, segment_idx = self.segment_idx)
-        
-    def plot_target_and_candidates(self):
-        baseline_vs_candidates_plotter(list_of_candidates = self.list_of_candidates, target_data = self.target_data, 
-                                       city = self.city, segment_class = self.segment_class, segment_idx = self.segment_idx)
-        
-    
+
     def find_optimal_baseline(self):
         self.optimal_baseline = None
         self.min_mae_error = float('inf')
@@ -68,7 +59,28 @@ class TimeSeriesData():
                 self.min_mae_error = error
                 self.optimal_baseline = candidate
                 self.optimal_difference = diff
-        return {'optimal_baseline_curve' : self.optimal_baseline, 'optimal_baseline_diff': self.optimal_difference, 'optimal_baseline_error': self.min_mae_error}
+        self.optimal_baseline_data = {'optimal_baseline_curve' : self.optimal_baseline, 'optimal_baseline_diff': self.optimal_difference,
+                                       'optimal_baseline_error': self.min_mae_error, 'target_curve': target_curve}
+        return self.optimal_baseline_data
+    
+
+    def plot_target_and_baseline(self):
+        target_vs_bank_of_candidates_plotter(target_data = self.target_data, bank_of_data = self.bank_of_data, city = self.city,
+                                    segment_class = self.segment_class, segment_idx = self.segment_idx)
+        
+
+    def plot_target_and_candidates(self):
+        target_vs_single_candidate_plotter(list_of_candidates = self.list_of_candidates, target_data = self.target_data, 
+                                       city = self.city, segment_class = self.segment_class, segment_idx = self.segment_idx)
+        
+    
+    def plot_target_and_optimal_baseline(self):
+        opt_baseline = self.optimal_baseline_data['optimal_baseline_curve']
+        target_curve = self.optimal_baseline_data['target_curve']
+        target_vs_optimal_baseline_plotter(optimal_baseline = opt_baseline, target_curve = target_curve, city = self.city,
+                                           segment_class = self.segment_class, segment_idx = self.segment_idx)
+
+
 
 
 
