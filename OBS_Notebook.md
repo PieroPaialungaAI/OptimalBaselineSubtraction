@@ -42,33 +42,12 @@ The "preprocessing" part of the data is handled by the ```data.py``` code, so we
 
 A table with the attributes for the cities can be found in the ```.city_attribute_data```:
 
-
-
-
-
 ```python
 from data import *
 data = TimeSeriesData()
 data.city_attribute_data.head()
 ```
 
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -128,23 +107,6 @@ While the correspoding time series can be found in the  ```.temperature_data```,
 data.temperature_data[['Vancouver','datetime']].head()
 ```
 
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -184,8 +146,90 @@ data.temperature_data[['Vancouver','datetime']].head()
 </div>
 
 
+### Selecting the Target Segment
+
+So let's say we have our dataset and we want to see if there is an anomaly in a specific section. The following code pulls the city of interest and allows you to pick a specific window (e.g. a day, a week or a month) for that specific city. For example, let's pick **day** number **10** for **city = New York**.
 
 
+```python
+city = 'New York'
+segment_class = 'day'
+segment_idx = 10
+data.isolate_city_and_time(city = city, segment_idx = segment_idx, segment_class = segment_class)
+data.plot_target_and_baseline()
+```
+    
+![png](OBS_Notebook_files/OBS_Notebook_5_0.png)
+    
+
+### Selecting the Bank of Candidates
+
+As we selected our city, window and index, all the remaining windows form your bank of candidates. For example, for our **day** window, our segments have 24 points (one per hour). For this reason the list of candidates will have shape ```(number of days - 1, 24)```. 
+
+
+```python
+data.list_of_candidates.shape
+```
+
+
+
+
+    (1853, 24)
+
+
+
+Let's display some random candidates using the ```plot_target_and_candidates``` via the ```baseline_vs_candidates_plotter```.
+
+
+```python
+data.plot_target_and_candidates()
+```
+
+
+    
+![png](OBS_Notebook_files/OBS_Notebook_9_0.png)
+    
+
+
+### Selecting the optimal baseline  
+In this step, we will use the MAE metric to find the time series that is the closest to our target in the list of candidates. 
+The result of the OBS algorithm can be found here:
+```python
+optimal_baseline_data = data.find_optimal_baseline()
+optimal_baseline_data
+```
+
+
+
+
+    {'optimal_baseline_curve': array([283.58730199, 283.48      , 284.11087113, 283.24      ,
+            283.28088357, 283.4       , 283.53025526, 283.87      ,
+            284.30413177, 283.83      , 283.77051025, 283.59      ,
+            283.64469697, 283.81      , 284.52073246, 284.93      ,
+            285.29078699, 286.3       , 286.47010182, 286.95      ,
+            287.10322709, 288.16      , 288.11346276, 287.96      ]),
+     'optimal_baseline_diff': array([0.12269801, 0.22      , 0.92087113, 0.17      , 0.22088357,
+            0.46      , 0.66025526, 0.49      , 0.78413177, 0.15666667,
+            0.05615642, 0.39      , 0.25530303, 0.4       , 0.78926754,
+            0.69      , 0.98921301, 0.95      , 0.83989818, 0.36      ,
+            0.07677291, 1.69      , 0.57846276, 0.64      ]),
+     'optimal_baseline_error': 0.5379408442499999,
+     'target_curve': array([283.71      , 283.26      , 283.19      , 283.07      ,
+            283.06      , 282.94      , 282.87      , 283.38      ,
+            283.52      , 283.67333333, 283.82666667, 283.98      ,
+            283.9       , 284.21      , 285.31      , 285.62      ,
+            286.28      , 287.25      , 287.31      , 287.31      ,
+            287.18      , 286.47      , 287.535     , 288.6       ])}
+
+
+
+### Displaying the Optimal Baseline:
+If we plot the optimal baseline vs the target curve, we see the following plot:
+```python
+data.plot_target_and_optimal_baseline()
+``` 
+![png](OBS_Notebook_files/OBS_Notebook_14_0.png)
+  
 ```python
 
 ```

@@ -14,7 +14,6 @@ class TimeSeriesData():
         self.build_temperature_dict_data()
 
 
-
     def select_city(self, city):
         self.selected_city_data = self.temperature_data[['datetime',city]].copy()
         self.selected_city_data = self.selected_city_data.reset_index().drop('index',axis=1)
@@ -64,6 +63,14 @@ class TimeSeriesData():
         return self.optimal_baseline_data
     
 
+    def run_anomaly_detection(self, threshold, plot = True):
+        self.threshold = threshold
+        scaled_signal = self.optimal_baseline_data['optimal_baseline_diff']/self.optimal_baseline_data['target_curve'].max()
+        self.anomaly_data = {'time':np.arange(0,len(scaled_signal)), 'residual': scaled_signal, 'mask': scaled_signal > threshold}
+        if plot:
+            self.plot_anomaly_detection_result()
+
+
     def plot_target_and_baseline(self):
         target_vs_bank_of_candidates_plotter(target_data = self.target_data, bank_of_data = self.bank_of_data, city = self.city,
                                     segment_class = self.segment_class, segment_idx = self.segment_idx)
@@ -75,14 +82,19 @@ class TimeSeriesData():
         
     
     def plot_target_and_optimal_baseline(self):
-        opt_baseline = self.optimal_baseline_data['optimal_baseline_curve']
-        target_curve = self.optimal_baseline_data['target_curve']
-        target_vs_optimal_baseline_plotter(optimal_baseline = opt_baseline, target_curve = target_curve, city = self.city,
+        target_vs_optimal_baseline_plotter(optimal_baseline_data = self.optimal_baseline_data, city = self.city,
                                            segment_class = self.segment_class, segment_idx = self.segment_idx)
 
 
+    def plot_target_and_optimal_baseline(self):
+        target_vs_optimal_baseline_plotter(optimal_baseline_data = self.optimal_baseline_data, city = self.city,
+                                           segment_class = self.segment_class, segment_idx = self.segment_idx)
 
 
+    def plot_anomaly_detection_result(self):
+        anomaly_detection_plotter(anomaly_data = self.anomaly_data, threshold = self.threshold, 
+                                  city = self.city, segment_class = self.segment_class, 
+                                  segment_idx = self.segment_idx)
 
 
 
