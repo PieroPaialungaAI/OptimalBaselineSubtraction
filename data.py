@@ -66,9 +66,11 @@ class TimeSeriesData():
     def run_anomaly_detection(self, threshold, plot = True):
         self.threshold = threshold
         scaled_signal = self.optimal_baseline_data['optimal_baseline_diff']/self.optimal_baseline_data['target_curve'].max()
-        self.anomaly_data = {'time':np.arange(0,len(scaled_signal)), 'residual': scaled_signal, 'mask': scaled_signal > threshold}
+        fixed_target = np.where(scaled_signal > threshold, self.optimal_baseline_data['optimal_baseline_curve'], self.optimal_baseline_data['target_curve'])
+        self.anomaly_data = {'time':np.arange(0,len(scaled_signal)), 'residual': scaled_signal, 'mask': scaled_signal > threshold, 'target_replaced_anomaly': fixed_target}
         if plot:
             self.plot_anomaly_detection_result()
+        return self.anomaly_data
 
 
     def plot_target_and_baseline(self):
