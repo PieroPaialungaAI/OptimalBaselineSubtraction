@@ -54,7 +54,21 @@ class TimeSeriesData():
     def plot_target_and_candidates(self):
         baseline_vs_candidates_plotter(list_of_candidates = self.list_of_candidates, target_data = self.target_data, 
                                        city = self.city, segment_class = self.segment_class, segment_idx = self.segment_idx)
-
+        
+    
+    def find_optimal_baseline(self):
+        self.optimal_baseline = None
+        self.min_mae_error = float('inf')
+        target_curve = np.array(self.target_data[self.city]).reshape(-1,1)[:,0]
+        self.optimal_difference = None
+        for candidate in self.list_of_candidates:
+            diff = np.abs(candidate - target_curve)
+            error = np.mean(diff,axis=0)
+            if error < self.min_mae_error:
+                self.min_mae_error = error
+                self.optimal_baseline = candidate
+                self.optimal_difference = diff
+        return {'optimal_baseline_curve' : self.optimal_baseline, 'optimal_baseline_diff': self.optimal_difference, 'optimal_baseline_error': self.min_mae_error}
 
 
 
