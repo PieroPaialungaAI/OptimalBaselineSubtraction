@@ -13,7 +13,7 @@ def target_vs_bank_of_candidates_plotter(target_data, bank_of_data, city, segmen
     x_candidates = np.array(bank_of_data['datetime'])  # or .values
     y_candidates = np.array(bank_of_data[city]).reshape(-1,1)[:,0]  # or .values
     plt.subplot(2,1,2)
-    plt.title('Bank of Candidates', fontsize = 20)
+    plt.title('Remaining part of the time series', fontsize = 20)
     plt.plot(x_candidates,y_candidates, color='navy')
     plt.xticks(rotation=45)
     plt.ylabel('Temperature (K)')
